@@ -62,7 +62,7 @@ In the next lab there's no configuration in the switch which means all hosts bel
 
 ![vlans diagram](../img/vlans_diagram.png)
 
-> Download this lab at [vlans___lab_without_config.pkt](../labs/vlans___lab_without_config.pkt)
+> Download this lab at [vlans___lab_without_config.pkt](https://github.com/noevazz/CCNA_200_301/raw/main/labs/vlans___lab_without_config.pkt)
 
 Let's say Switch0 knows the mac address of all hosts (you can achieve this by pinging all PCs from one PC):
 
@@ -196,7 +196,7 @@ Now there are 2 broadcast domains. Run the same steps as in the previous lab (ma
 
 - With this escenario you will notice how the ARP request is only send to one PC (it will be send for all devices in the same VLAN, this lab only have 2 PCs per VLAN, add more if you want to experiment)
 
-Download this lab with the configuration at: [vlans___lab_with_config.pkt](../labs/vlans___lab_with_config.pkt)
+Download this lab with the configuration at: [vlans___lab_with_config.pkt](https://github.com/noevazz/CCNA_200_301/raw/main/labs/vlans___lab_with_config.pkt)
 
 
 ## Trunks
@@ -216,5 +216,5 @@ When configuring trunk ports it is important to know these other concepts:
 
 ## External resources
 
-1. [En] https://study-ccna.com/what-is-a-vlan/
-2. [En] https://www.ccnablog.com/vlans-part-i/
+1. [En] [https://study-ccna.com/what-is-a-vlan/](https://study-ccna.com/what-is-a-vlan/)
+2. [En] [https://www.ccnablog.com/vlans-part-i/](https://www.ccnablog.com/vlans-part-i/)
