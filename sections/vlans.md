@@ -73,10 +73,10 @@ Let's start by removoving all entries from the ARP table in PC1 and PC2 and remo
 ![vlans diagram](../img/cleaning_mac_and_arp_tables.gif)
 
 Useful commands:
+- Clear the ARP table in all PCs using the `arp -d` command (when consulting the ARP table a packet is send to the Switch and it will populate its MAC address table, for that reason FIRST clear the ARP tables in the PCs before clearing the MAC address table in Switch0).
+- Use `arp -a` to display the ARP table in al PCs
 - Use the `show mac-address-table` command to **SHOW** the mac address table in Switch0.
 - Use the `clear mac-address-table` command to **CLEAR** the mac address table in Switch0.
-- Clear the ARP table in all PCs using the `arp -d` command.
-- Use `arp -a` to display the ARP table in al PCs.
 
 > **To remember**: MAC address table maps ports with MAC addresses, and ARP table maps IP addresses with MAC addresses.
 
@@ -92,8 +92,7 @@ PC3 and PC4 will discard the packet and PC2 will be the only host replying with 
 ![](../img/pc2_replies_arp.gif)
 
 > When Switch0 recieves the ARP response of PC2 it now knows the mac address of PC2, Switch0 will add that mac address to its mac address table.\
-> PC1 will add the MAC address and IP address of PC2 to its ARP table.
-
+> Once PC1 recieves the packet forwared by Switch0 PC1 will add the MAC address and IP address of PC2 to its ARP table.
 
 Now PC1 knows the mac address of PC2, PC1 now can send an ICMP requests (ping) with all the information needed to PC2:
 
