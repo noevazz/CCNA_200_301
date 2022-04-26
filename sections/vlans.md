@@ -100,7 +100,7 @@ Now PC1 knows the mac address of PC2, PC1 now can send an ICMP requests (ping) w
 
 > Note 4 ICMP packets are sent by default.
 
-What if PC1 and PC2 know the mac address of each other but Switch0 does not have any information in its macc address table?, **When a switch doesn't have the destination mac address in its mac address table, it floods the frame (packet in this case because it is an ICMP message) to all other port except the receiving port**. At this point of the lab you can try this by clearing the mac address table of Switch0 and run the same steps again:
+What if PC1 and PC2 know the mac address of each other but Switch0 does not have any information in its mac address table?, **When a switch doesn't have the destination mac address in its mac address table, it floods the frame (packet in this case because it is an ICMP message) to all other port except the receiving port**. At this point of the lab you can try this by clearing the mac address table of Switch0 and run the same steps again:
 
 ![](../img/switch_without_mac_table.gif)
 
@@ -112,9 +112,11 @@ The same thing will happen with **broadcast** messages, all hosts within the sam
 
 ## Network with VLANs
 
-In this lab we are going to create VLAN 10 (For PC1 and PC2) and VLAN 20 for (PC3 and PC4).
+We already know how ARP works.
 
-Configure VLAN 10:
+In this lab we are going to create VLAN 10 (For PC1 and PC2) and VLAN 20 for (PC3 and PC4) in Switch0:
+
+- Create VLAN 10:
 
 ```
 Switch>en
@@ -127,7 +129,7 @@ Switch(config-vlan)
 
 > `name` command is optional.
 
-Assign FastEthernet0/1 and FastEthernet0/2 to VLAN 10:
+- Assign FastEthernet0/1 and FastEthernet0/2 to VLAN 10:
 
 ```
 Switch(config-vlan)#exit
@@ -153,9 +155,8 @@ Switch(config-if-range)#
 
 > Note you can use the `interface range` command to configure these ports at the same time, this saves some time and it is the same as doing it individually in each interface.
 
-> Also note VLAN 20 was created on the fly.
+> Also note VLAN 20 was created on the fly so we did not provide a name for this VLAN.
 
-> Finally note we did not provide a name for the VLAN (because we did not configure the VLAN manually)
 
 **Access mode** is used for these interfaces because Access ports are part of only one VLAN and normally used for terminanting end devices like PCs, laptops, printers, etc. *(We will explore more about switchport modes in the DTP section).*
 
@@ -190,9 +191,19 @@ Switch#
 
 > Also note VLAN 20 recieved the name "VLAN0020", this is the default format when you do not provide a name (or when a VLAN is created automatically).
 
-Now there are 2 broadcast domains. Run the same steps as in the previous lab (make sure to clear the ARP table on all hosts and verify the switch has its macc address table complete):
+Now there are 2 broadcast domains:
 
-- With this escenario you will notice how the ARP request is only send to one PC (it will be send for all devices in the same VLAN, this lab only have 2 PCs per VLAN, add more if you want to experiment)
+![](../img/vlans_with_config.png)
+
+**I have cleared the MAC address table in Switch0 and cleared the ARP table in all PCs.**
+
+Let's ping PC2 from PC1:
+
+![](../img/network_with_vlans.gif)
+
+> When using the evelope icon it will send only one ICMP message (not 4 as `ping` does)
+
+- Note how Switch0 only sends ARP request to PC2 (green envelopes), after the ARP process is completed PC1 sends the ICMP packet (brown envelope).
 
 Download this lab with the configuration at: https://github.com/noevazz/CCNA_200_301/raw/main/labs/vlans___lab_with_config.pkt
 
