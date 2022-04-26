@@ -66,7 +66,7 @@ In the next lab:
 
 ![vlans diagram](../img/vlans_diagram.png)
 
-> Download this lab at https://github.com/noevazz/CCNA_200_301/raw/main/labs/vlans___lab_without_config.pkt
+Download this lab at [https://github.com/noevazz/CCNA_200_301/raw/main/labs/vlans___lab_without_config.pkt](https://github.com/noevazz/CCNA_200_301/raw/main/labs/vlans___lab_without_config.pkt)
 
 Let's start by removoving all entries from the ARP table in PC1 and PC2 and remove all entries in the MAC address table in Switch0:
 
@@ -205,7 +205,7 @@ Let's ping PC2 from PC1:
 
 - Note how Switch0 only sends ARP request to PC2 (green envelopes), after the ARP process is completed PC1 sends the ICMP packet (brown envelope).
 
-Download this lab with the configuration at: https://github.com/noevazz/CCNA_200_301/raw/main/labs/vlans___lab_with_config.pkt
+Download this lab with the configuration at: [https://github.com/noevazz/CCNA_200_301/raw/main/labs/vlans___lab_with_config.pkt](https://github.com/noevazz/CCNA_200_301/raw/main/labs/vlans___lab_with_config.pkt)
 
 
 ## External resources
