@@ -5,6 +5,7 @@ This repository contains documents that I will use for my exam preparation.
 ## Sections
 
 - [IPv4 Classes](./sections/ipv4_classes.md)
+- [vlans](./sections/vlans.md)
 
 ## 📋 Exam topics
 See latest updates to this list on https://learningnetwork.cisco.com/s/ccna-exam-topics.

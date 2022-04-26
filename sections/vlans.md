@@ -58,60 +58,52 @@ Default VLAN 1 may not be deleted
 
 ## Network without VLANS
 
-In the next lab there's no configuration in the switch which means all hosts belong to the default VLAN 1.
+In the next lab:
+- PC1 will ping PC2.
+- There's no configuration in the switch which means all hosts belong to the default VLAN 1.
+- Only PCs has a static IP address.
+
 
 ![vlans diagram](../img/vlans_diagram.png)
 
 > Download this lab at https://github.com/noevazz/CCNA_200_301/raw/main/labs/vlans___lab_without_config.pkt
 
-Let's say Switch0 knows the mac address of all hosts (you can achieve this by pinging all PCs from one PC):
+Let's start by removoving all entries from the ARP table in PC1 and PC2 and remove all entries in the MAC address table in Switch0:
 
-```
-Switch>en
-Switch#show mac-address-table 
-          Mac Address Table
--------------------------------------------
+![vlans diagram](../img/cleaning_mac_and_arp_tables.gif)
 
-Vlan    Mac Address       Type        Ports
-----    -----------       --------    -----
+Useful commands:
+- Use the `show mac-address-table` command to **SHOW** the mac address table in Switch0.
+- Use the `clear mac-address-table` command to **CLEAR** the mac address table in Switch0.
+- Clear the ARP table in all PCs using the `arp -d` command.
+- Use `arp -a` to display the ARP table in al PCs.
 
-   1    0060.3eca.524d    DYNAMIC     Fa0/4
-   1    0060.3ee2.e0e4    DYNAMIC     Fa0/3
-   1    0060.5c42.59de    DYNAMIC     Fa0/2
-   1    00e0.a37e.8a37    DYNAMIC     Fa0/1
+> **To remember**: MAC address table maps ports with MAC addresses, and ARP table maps IP addresses with MAC addresses.
 
-Switch#
-```
+With this scenario if PC1 wants to ping PC2, PC1 needs to resolve the mac address of PC2 and for that an ARP request will be sent, ARP asks the switch to send an ARP request to all hosts except for the one that sent the request (PC1 in this case), since all hosts are in the same broadcast domain then PC2, PC3, and PC4 will receive the ARP message:
 
-Now clean the ARP table in all PCs using this command in the Command Prompt:
+![](../img/arp_to_everyone.gif)
 
-```
-C:\>arp -d
-```
+> Note: When Switch0 recieves the ARP request of PC1 it now knows the mac address of PC1, Switch0 will add that mac address to its mac address table.\
+> When PC2 recieve the ARP request it will know the IP and MAC address of PC1 therefore PC2 will add this info to its ARP table.
 
-> Use `arp -a` to display the ARP table 
+PC3 and PC4 will discard the packet and PC2 will be the only host replying with an ARP response, this response is forwarded from the switch to PC1:
+
+![](../img/pc2_replies_arp.gif)
+
+> When Switch0 recieves the ARP response of PC2 it now knows the mac address of PC2, Switch0 will add that mac address to its mac address table.\
+> PC1 will add the MAC address and IP address of PC2 to its ARP table.
 
 
-With this scenario if PC1 wants to ping PC2, PC1 needs to resolve the mac address of PC2 and for that an ARP request will be sent, ARP asks the switch to send an ARP request to all hosts except for the one that sent the request (PC1 in this case), since all hosts are in the same broadcast domain then PC2, PC3, and PC4 will receive the ARP message.
+Now PC1 knows the mac address of PC2, PC1 now can send an ICMP requests (ping) with all the information needed to PC2:
 
-PC2 will be the only hosts replying with an ARP response. Now the switch can tell PC1 the mac address of PC2, PC1 now can send an ICMP request (ping) with all the information needed.
+![](../img/pc1_can_ping_now.gif)
 
-> You may want to experiment by cleaning the mac address table of the switch and the arp table in the hosts and see what happen in this scenario. For this you can use the following command to clear the mac address table in a switch:
+> Note 4 ICMP packets are sent by default.
 
-```
-Switch#clear mac-address-table
+What if PC1 and PC2 know the mac address of each other but Switch0 does not have any information in its macc address table?, in this case Switch0 will be the one generating ARP requests. At this point of the lab you can try this by clearing the mac address table of Switch0 and run the same steps again.
 
-Switch#show mac-address-table
-          Mac Address Table
--------------------------------------------
-
-Vlan    Mac Address       Type        Ports
-----    -----------       --------    -----
-
-Switch#
-```
-
-The same thing will happen with broadcast messages, all hosts within the same broadcast daomain will recieve a copy. Example: DHCP (Dynamic Host Configuration Protocol, used to assing IP addresses atuomatically) uses broadcast and unicast messages to work.
+The same thing will happen with **broadcast** messages, all hosts within the same broadcast domain will recieve a copy. Example: DHCP (Dynamic Host Configuration Protocol, used to assing IP addresses atuomatically) uses broadcast and unicast messages to work.
 
 
 ## Network with VLANs
@@ -129,6 +121,8 @@ Switch(config-vlan)#name financial
 Switch(config-vlan)
 ```
 
+> `name` command is optional.
+
 Assign FastEthernet0/1 and FastEthernet0/2 to VLAN 10:
 
 ```
@@ -142,8 +136,6 @@ Switch(config-if)#switchport mode access
 Switch(config-if)#switchport access vlan 10
 Switch(config-if)#
 ```
-
-> `name` command is optional.
 
 For VLAN 20 we are going to ommit the VLAN creation and we are going to assing VLAN 20 directly on FastEthernet0/3 and FastEthernet0/4:
 
@@ -161,7 +153,9 @@ Switch(config-if-range)#
 
 > Finally note we did not provide a name for the VLAN (because we did not configure the VLAN manually)
 
-Check the VLAN configuration:
+**Access mode** is used for these interfaces because Access ports are part of only one VLAN and normally used for terminanting end devices like PCs, laptops, printers, etc. *(We will explore more about switchport modes in the DTP section).*
+
+Now let's check the VLAN configuration:
 
 ```
 Switch(config-if-range)#end
@@ -199,22 +193,8 @@ Now there are 2 broadcast domains. Run the same steps as in the previous lab (ma
 Download this lab with the configuration at: https://github.com/noevazz/CCNA_200_301/raw/main/labs/vlans___lab_with_config.pkt
 
 
-## Trunks
-
-A trunk is a point-to-point link between two switches. This link allows traffic from many VLANs to move between the switches.
-
-When configuring trunk ports it is important to know these other concepts:
-
-- **Native VLAN**: This is the port that the switch uses to send untagged traffic. Tagged traffic is all traffic destined to a particular VLAN. Untagged traffic may be any traffic which is not destined to any particular VLAN such as control information.
-- **Dynamic trunk protocol**: DTP is a CISCO proprietary protocol that negotiates the trunking modes between switches.
-
-
-
-## Port security
-
-
-
 ## External resources
 
 1. [En] [https://study-ccna.com/what-is-a-vlan/](https://study-ccna.com/what-is-a-vlan/)
 2. [En] [https://www.ccnablog.com/vlans-part-i/](https://www.ccnablog.com/vlans-part-i/)
+3. [En] [https://ipwithease.com/switchport-trunk-mode-vs-access-mode/](https://ipwithease.com/switchport-trunk-mode-vs-access-mode/)
