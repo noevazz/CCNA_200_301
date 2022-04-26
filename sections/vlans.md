@@ -73,7 +73,7 @@ Let's start by removoving all entries from the ARP table in PC1 and PC2 and remo
 ![vlans diagram](../img/cleaning_mac_and_arp_tables.gif)
 
 Useful commands:
-- Clear the ARP table in all PCs using the `arp -d` command (when consulting the ARP table a packet is send to the Switch and it will populate its MAC address table, for that reason FIRST clear the ARP tables in the PCs before clearing the MAC address table in Switch0).
+- Clear the ARP table in all PCs using the `arp -d` command (when clearing the ARP table a packet is send to the Switch and it will populate its MAC address table, for that reason FIRST clear the ARP tables in the PCs before clearing the MAC address table in Switch0).
 - Use `arp -a` to display the ARP table in al PCs
 - Use the `show mac-address-table` command to **SHOW** the mac address table in Switch0.
 - Use the `clear mac-address-table` command to **CLEAR** the mac address table in Switch0.
@@ -100,7 +100,12 @@ Now PC1 knows the mac address of PC2, PC1 now can send an ICMP requests (ping) w
 
 > Note 4 ICMP packets are sent by default.
 
-What if PC1 and PC2 know the mac address of each other but Switch0 does not have any information in its macc address table?, in this case Switch0 will be the one generating ARP requests. At this point of the lab you can try this by clearing the mac address table of Switch0 and run the same steps again.
+What if PC1 and PC2 know the mac address of each other but Switch0 does not have any information in its macc address table?, **When a switch doesn't have the destination mac address in its mac address table, it floods the frame (packet in this case because it is an ICMP message) to all other port except the receiving port**. At this point of the lab you can try this by clearing the mac address table of Switch0 and run the same steps again:
+
+![](../img/switch_without_mac_table.gif)
+
+> Note how Switch0 flooded the packet to all PCs then PC2 replied and at that moment Switch0 was able to know the mac address of PC2. Next packets were sent directly from PC1 to PC2.
+
 
 The same thing will happen with **broadcast** messages, all hosts within the same broadcast domain will recieve a copy. Example: DHCP (Dynamic Host Configuration Protocol, used to assing IP addresses atuomatically) uses broadcast and unicast messages to work.
 
