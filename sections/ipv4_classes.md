@@ -13,7 +13,7 @@
 
 ## How to remember this table?
 
-**Class A** sets the first digit to `0`, you will must change that first digit:
+**Class A** sets the first digit to `0`, you must never change that digit:
 
     Bin: (0)0000000 to (0)11111111
     Dec: 0 to 127
