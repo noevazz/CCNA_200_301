@@ -64,13 +64,13 @@ In the next lab:
 - Only PCs has a static IP address.
 
 
-![vlans diagram](../img/vlans_diagram.png)
+![vlans_diagram.png](../img/vlans_diagram.png)
 
 Download this lab at [https://github.com/noevazz/CCNA_200_301/raw/main/labs/vlans___lab_without_config.pkt](https://github.com/noevazz/CCNA_200_301/raw/main/labs/vlans___lab_without_config.pkt)
 
 Let's start by removoving all entries from the ARP table in PC1 and PC2 and remove all entries in the MAC address table in Switch0:
 
-![vlans diagram](../img/cleaning_mac_and_arp_tables.gif)
+![cleaning_mac_and_arp_tables.gif](../img/cleaning_mac_and_arp_tables.gif)
 
 Useful commands:
 - Clear the ARP table in all PCs using the `arp -d` command (when clearing the ARP table a packet is send to the Switch and it will populate its MAC address table, for that reason FIRST clear the ARP tables in the PCs before clearing the MAC address table in Switch0).
@@ -82,27 +82,27 @@ Useful commands:
 
 With this scenario if PC1 wants to ping PC2, PC1 needs to resolve the mac address of PC2 and for that an ARP request will be sent, ARP asks the switch to send an ARP request to all hosts except for the one that sent the request (PC1 in this case), since all hosts are in the same broadcast domain then PC2, PC3, and PC4 will receive the ARP message:
 
-![](../img/arp_to_everyone.gif)
+![arp_to_everyone.gif](../img/arp_to_everyone.gif)
 
 > Note: When Switch0 recieves the ARP request of PC1 it now knows the mac address of PC1, Switch0 will add that mac address to its mac address table.\
 > When PC2 recieve the ARP request it will know the IP and MAC address of PC1 therefore PC2 will add this info to its ARP table.
 
 PC3 and PC4 will discard the packet and PC2 will be the only host replying with an ARP response, this response is forwarded from the switch to PC1:
 
-![](../img/pc2_replies_arp.gif)
+![pc2_replies_arp.gif](../img/pc2_replies_arp.gif)
 
 > When Switch0 recieves the ARP response of PC2 it now knows the mac address of PC2, Switch0 will add that mac address to its mac address table.\
 > Once PC1 recieves the packet forwared by Switch0 PC1 will add the MAC address and IP address of PC2 to its ARP table.
 
 Now PC1 knows the mac address of PC2, PC1 now can send an ICMP requests (ping) with all the information needed to PC2:
 
-![](../img/pc1_can_ping_now.gif)
+![pc1_can_ping_now.gif](../img/pc1_can_ping_now.gif)
 
 > Note 4 ICMP packets are sent by default.
 
 What if PC1 and PC2 know the mac address of each other but Switch0 does not have any information in its mac address table?, **When a switch doesn't have the destination mac address in its mac address table, it floods the frame (packet in this case because it is an ICMP message) to all other port except the receiving port**. At this point of the lab you can try this by clearing the mac address table of Switch0 and run the same steps again:
 
-![](../img/switch_without_mac_table.gif)
+![switch_without_mac_table.gif](../img/switch_without_mac_table.gif)
 
 > Note how Switch0 flooded the packet to all PCs then PC2 replied and at that moment Switch0 was able to know the mac address of PC2. Next packets were sent directly from PC1 to PC2.
 
@@ -193,13 +193,13 @@ Switch#
 
 Now there are 2 broadcast domains:
 
-![](../img/vlans_with_config.png)
+![vlans_with_config.png](../img/vlans_with_config.png)
 
 **I have cleared the MAC address table in Switch0 and cleared the ARP table in all PCs.**
 
 Let's ping PC2 from PC1:
 
-![](../img/network_with_vlans.gif)
+![network_with_vlans.gif](../img/network_with_vlans.gif)
 
 > When using the evelope icon it will send only one ICMP message (not 4 as `ping` does)
 
