@@ -32,7 +32,7 @@ This means VLANs group devices using software (that's what logical means).
     - Delay less than 150 ms across network-
     - Ability to be routed around congested areas on the network.
 
-Please remember that a trunk link is a link between two switches that is able to carrie traffic from multiple VLANS:
+Please remember that a trunk link is a link between two switches that is able to carry traffic from multiple VLANS:
 
 ![trunk_diagram.png](../img/trunk_diagram.png)
 

@@ -6,7 +6,7 @@ This repository contains documents that I will use for my exam preparation.
 
 - [IPv4 Classes](./sections/ipv4_classes.md)
 - [VLANS](./sections/vlans.md)
-- [Switch trunks and DTP](./switch_trunks_and_DTP.md)
+- [Switch trunks and DTP](./sections/switch_trunks_and_DTP.md)
 
 ## 📋 Exam topics
 See latest updates to this list on https://learningnetwork.cisco.com/s/ccna-exam-topics.
