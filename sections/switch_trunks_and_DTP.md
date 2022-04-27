@@ -114,7 +114,8 @@ Now both switches have configured a trunk link statically, PCs in Switch1 can no
 
 ### Explore VLANs
 
-```Switch0#show vlan brief 
+```
+Switch0#show vlan brief 
 
 VLAN Name                             Status    Ports
 ---- -------------------------------- --------- -------------------------------
