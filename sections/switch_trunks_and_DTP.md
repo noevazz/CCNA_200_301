@@ -158,9 +158,45 @@ Fa0/10      10,20
 Switch0#
 ```
 
+But, why native VLAN was not shown in the output of `show vlan brief`?, answer: The `switchport trunk native vlan <vlan-id>` only specifies the native VLAN, but it does not create the VLAN in the current VLAN database (other devices/versions can be different):
+
+```
+Switch0#show vlan id 99
+VLAN id 99 not found in current VLAN database
+```
+
+The recommendation is to create the VLAN:
+
+```
+Switch1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch1(config)#vlan 99
+Switch1(config-vlan)#do show vlan br
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/2, Fa0/3, Fa0/4, Fa0/5
+                                                Fa0/6, Fa0/7, Fa0/8, Fa0/9
+                                                Fa0/10, Fa0/11, Fa0/12, Fa0/13
+                                                Fa0/14, Fa0/15, Fa0/16, Fa0/17
+                                                Fa0/18, Fa0/19, Fa0/20, Fa0/21
+                                                Fa0/22, Fa0/23, Fa0/24, Gig0/1
+                                                Gig0/2
+99   VLAN0099                         active    <--- NOW YOU CAN SEE THE VLAN HERE
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+Switch1(config-vlan)#
+```
+
+### Best practice
+
+**If you do not configure the native VLAN, it will be VLAN 1 by default. It is not recommended to use VLAN 1 as the native VLAN.** That's why we saw a VLAN mismatch message when configuring the native vlan, because the other port in the other switch configured the port as trunk (using DTP, but later we changed this to an static config) and the default configuration is to set the native VLAN to VLAN 1.
+
 ### Explore switchport configuration on interfaces
 
-You can also use the `show interfaces <int-id> switchport`command to find the native VLAN. 
+You can also use the `show interfaces <int-id> switchport` command to find the native VLAN. 
 
 ```
 Switch0#show interfaces f0/10 switchport 
@@ -170,7 +206,7 @@ Administrative Mode: trunk                    <--- ATTENTION TO THIS
 Operational Mode: trunk                       <--- ATTENTION TO THIS
 Administrative Trunking Encapsulation: dot1q
 Operational Trunking Encapsulation: dot1q
-Negotiation of Trunking: On
+Negotiation of Trunking: On                   <--- ATTENTION TO THIS
 Access Mode VLAN: 1 (default)
 Trunking Native Mode VLAN: 99 (Inactive)      <--- ATTENTION TO THIS
 Voice VLAN: none
@@ -193,6 +229,109 @@ Appliance trust: none
 
 Switch0#
 ```
+
+- The trunking **administrative** mode is the mode in which the interface has been configured using the switchport mode command.
+- The trunking **operational** mode is the mode in which the interface actually operates.
+
+### Switchport nonegotiate
+
+The `switchport nonegotiate` command disables DTP negotiation on a Layer 2 interface. The command is available in the Interface Configuration Mode.
+
+> This command is only accepted for interfaces that are statically configured in access or trunk mode. DTP negotiation cannot be disabled on an interface that is configured in dynamic auto or dynamic desirable mode.
+
+When we try to disable DTP on a Layer 2 interface that has its trunking administrative mode to dynamic, we receive an error message stating that the command has been rejected due to a `Command rejected: Conflict between "nonegotiate" and "dynamic" status`.
+
+Let's disable DTP:
+
+```
+Switch0>en
+Switch0#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch0(config)#int f0/10
+Switch0(config-if)#switchport nonegotiate      <--- DISABLING DTP
+Switch0(config-if)#end
+Switch0#
+%SYS-5-CONFIG_I: Configured from console by console
+
+Switch0#show int f0/10 switchport 
+Name: Fa0/10
+Switchport: Enabled
+Administrative Mode: trunk
+Operational Mode: trunk
+Administrative Trunking Encapsulation: dot1q
+Operational Trunking Encapsulation: dot1q
+Negotiation of Trunking: Off                   <--- ATTENTION TO THIS
+Access Mode VLAN: 1 (default)
+Trunking Native Mode VLAN: 99 (Inactive)
+Voice VLAN: none
+Administrative private-vlan host-association: none
+Administrative private-vlan mapping: none
+Administrative private-vlan trunk native VLAN: none
+Administrative private-vlan trunk encapsulation: dot1q
+Administrative private-vlan trunk normal VLANs: none
+Administrative private-vlan trunk private VLANs: none
+Operational private-vlan: none
+Trunking VLANs Enabled: 10,20,99
+Pruning VLANs Enabled: 2-1001
+Capture Mode Disabled
+Capture VLANs Allowed: ALL
+Protected: false
+Unknown unicast blocked: disabled
+Unknown multicast blocked: disabled
+Appliance trust: none
+
+Switch0#copy running-config startup-config 
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+Switch0#
+```
+
+```
+Switch1>en	
+Switch1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch1(config)#int f0/10
+Switch1(config-if)#switchport nonegotiate 
+Switch1(config-if)#end
+Switch1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+Switch1#show int f0/10 switchport 
+Name: Fa0/10
+Switchport: Enabled
+Administrative Mode: trunk
+Operational Mode: trunk
+Administrative Trunking Encapsulation: dot1q
+Operational Trunking Encapsulation: dot1q
+Negotiation of Trunking: Off                   <--- ATTENTION TO THIS
+Access Mode VLAN: 1 (default)
+Trunking Native Mode VLAN: 99 (Inactive)
+Voice VLAN: none
+Administrative private-vlan host-association: none
+Administrative private-vlan mapping: none
+Administrative private-vlan trunk native VLAN: none
+Administrative private-vlan trunk encapsulation: dot1q
+Administrative private-vlan trunk normal VLANs: none
+Administrative private-vlan trunk private VLANs: none
+Operational private-vlan: none
+Trunking VLANs Enabled: 10,20,99
+Pruning VLANs Enabled: 2-1001
+Capture Mode Disabled
+Capture VLANs Allowed: ALL
+Protected: false
+Unknown unicast blocked: disabled
+Unknown multicast blocked: disabled
+Appliance trust: none
+
+Switch1#copy running-config startup-config 
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+Switch1#
+```
+
+When an interface in access or trunk mode has DTP disabled on it will not participate in DTP negotiation, and will not respond to incoming DTP frames. Any DTP frames that it receives will simply be ignored.
 
 
 ## Dynamic configuration: DTP
@@ -265,3 +404,5 @@ These are the possible options and resulting mode when configuring the switchpor
 ## External resources
 
 1. [En] [https://www.freeccnastudyguide.com/study-guides/ccna/ch7/7-3-types-switch-ports/](https://www.freeccnastudyguide.com/study-guides/ccna/ch7/7-3-types-switch-ports/)
+2. [En] [https://www.connecteddots.online/resources/cisco-reference/understanding-cisco-dynamic-trunking-protocol](https://www.connecteddots.online/resources/cisco-reference/understanding-cisco-dynamic-trunking-protocol)
+3. [En] [https://www.connecteddots.online/resources/cisco-reference/disabling-dtp-negotiation-switchport-nonegotiate](https://www.connecteddots.online/resources/cisco-reference/disabling-dtp-negotiation-switchport-nonegotiate)
