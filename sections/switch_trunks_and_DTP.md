@@ -389,7 +389,7 @@ Let's revert the changes in interfaces FastEthernet0/10.
 
 Current configuration on Switch0:
 
-```bash
+```
 Switch0>en
 Switch0#show int f0/10 sw
 Switch0#show int f0/10 switchport 
@@ -496,7 +496,7 @@ Let's revert the changes on Interface F0/10:
 
 1. Enable negotiation:
 
-```bash
+```
 Switch0#sho runn | section FastEthernet0/10
 interface FastEthernet0/10
  switchport trunk native vlan 99
@@ -522,7 +522,7 @@ interface FastEthernet0/10
 
 2. Set access mode to dynamic auto (default configuration)
 
-```bash
+```
 Switch0(config-if)#switchport mode dynamic auto 
 Switch0(config-if)#
 %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/10, changed state to up
@@ -535,7 +535,7 @@ interface FastEthernet0/10
 
 3. Remove native VLAN configuration
 
-```bash
+```
 Switch0(config-if)#no switchport trunk native vlan 
 Switch0(config-if)#do sho runn | section FastEthernet0/10
 interface FastEthernet0/10
@@ -544,7 +544,7 @@ interface FastEthernet0/10
 
 4. Remove allowed VLANs
 
-```bash
+```
 Switch0(config-if)#no switchport trunk allowed vlan
 Switch0(config-if)#
 Switch0(config-if)#do sho runn | section FastEthernet0/10
@@ -563,7 +563,7 @@ We reverted the changes on Switch0, but both switches negotiated and the link be
 
 Let's change the native vlan on Switch0 to VLAN 99:
 
-```bash
+```
 Switch0#conf t
 Enter configuration commands, one per line.  End with CNTL/Z.
 Switch0(config)#int f0/10
@@ -606,7 +606,7 @@ Why does VLAN 99 says (Inactive)?:
 
 Because we never created VLAN 99 in the switch, `switchport trunk native vlan <vid>`only specifies the VLAN but it does not create the VLAN, let's create VLAN 99:
 
-```bash
+```
 Switch0(config)#vlan 99
 Switch0(config-vlan)#do sh int f0/10 switchport | section Trunking Native
 Trunking Native Mode VLAN: 99 (VLAN0099)
@@ -614,7 +614,7 @@ Trunking Native Mode VLAN: 99 (VLAN0099)
 
 Save changes:
 
-```bash
+```
 Switch0(config-vlan)#do wr mem
 Building configuration...
 [OK]
@@ -622,7 +622,7 @@ Building configuration...
 
 For the sake of learning, let's change the switchport mode of F0/10 in Switch1 to dynamic desirable:
 
-```bash
+```
 Switch1>en
 Switch1#conf t
 Enter configuration commands, one per line.  End with CNTL/Z.
@@ -633,7 +633,7 @@ Command rejected: Conflict between 'nonegotiate' and 'dynamic' status
 
 REMEMBER: dynamic auto, and dynamic desirable requires negotiation:
 
-```bash
+```
 Switch1(config-if)#no switchport nonegotiate 
 Switch1(config-if)#switchport mode dynamic desirable 
 
@@ -645,7 +645,7 @@ Switch1(config-if)#
 
 Finally create VLAN 99 and save changes:
 
-```bash
+```
 Switch1(config-if)#exit
 Switch1(config)#vlan 99
 Switch1(config-vlan)#do wr mem
