@@ -28,6 +28,7 @@ This repository contains documents that I will use for my exam preparation.
 |[IPv4 subnetting]: To do list|wip|
 |[IPv6 addresses]: To do list|wip|
 |[IPv6 address types](./sections/ipv6_address_types.md)|1.9 to 1.9.e|
+|[ARP]: To do list|wip|
 |[Transport layer]: To do list|wip|
 |[TCP]: To do list|wip|
 |[UDP]: To do list|wip|
@@ -36,6 +37,7 @@ This repository contains documents that I will use for my exam preparation.
 |[IP services]: To do list|wip|
 |[DHCPv4]: To do list|wip|
 |[DHCPv6]: To do list|wip|
+|[Security in DHCP]: To do list|wip|
 |[NAT for IPv4]: To do list|wip|
 |[STP]: To do list|wip|
 |[Syslog]: To do list|wip|

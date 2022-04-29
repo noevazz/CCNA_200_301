@@ -24,6 +24,8 @@ You can configure trunk links in two switches by setting the access mode as `tru
 
 ![](../img/trunk_link.png)
 
+Download this lab at [https://github.com/noevazz/CCNA_200_301/raw/main/labs/trunk_links.pkt](https://github.com/noevazz/CCNA_200_301/raw/main/labs/trunk_links.pkt).
+
 In this lab Switch0 is connected to Switch1 using the interface FastEthernet0/10 in both switches.
 
 ### Configure VLAN 10 and VLAN 20 in Switch1:
@@ -335,42 +337,250 @@ Switch1#
 When an interface in access or trunk mode has DTP disabled on it will not participate in DTP negotiation, and will not respond to incoming DTP frames. Any DTP frames that it receives will simply be ignored.
 
 
-## Dynamic configuration: DTP
+## Dynamic configuration: Dynamic Trunking Protocol (DTP)
 
 Cisco switches exchange DTP messages to dynamically learn whether the device at the other end of the link wants to perform trunking and, if so, which trunking protocol (**ISL or 802.1Q**) to use.
 
 These are the available options when configuring switchport mode:
 
 ```
-Switch(config)#int f0/1
-Switch(config-if)#switchport mode ?
+RandomSwitch(config)#int f0/8
+RandomSwitch(config-if)#switchport mode ?
   access   Set trunking mode to ACCESS unconditionally
   dynamic  Set trunking mode to dynamically negotiate access or trunk mode
   trunk    Set trunking mode to TRUNK unconditionally
-Switch(config-if)#
+RandomSwitch(config-if)#
 ```
 
 **dynamic** has a 2 configurations:
 
 ```
-Switch(config-if)#switchport mode dynamic ?
+RandomSwitch(config-if)#switchport mode dynamic ?
   auto       Set trunking mode dynamic negotiation parameter to AUTO
   desirable  Set trunking mode dynamic negotiation parameter to DESIRABLE
 ```
 
-Below you can see the default configuration of a FastEthernet port:
+> Switch ports are configured in `dynamic auto` mode by default **in Switches Cisco Catalyst 2960**.
+
+These are the possible options and resulting mode when configuring the switchport mode in 2 connected switches:
+
+|                 |Dynamic Auto|Dynamic Desirable|Trunk               |Access              |
+|-----------------|------------|-----------------|--------------------|--------------------|
+|Dynamic Auto     |Access      |Trunk            |Trunk               |Access              |
+|Dynamic Desirable|Trunk       |Trunk            |Trunk               |Access              |
+|Trunk            |Trunk       |Trunk            |Trunk               |Limited Connectivity|
+|Access           |Access      |Access           |Limited Connectivity|Access              |
+
+Explanation of each mode:
+
+- **switchport mode access** (DTP mode OFF): This mode puts the switch interface into permanent non-trunking mode regardless of whether the neighbouring interface is a trunk port or trying to become a trunk port that is why it is known as DTP mode OFF. The port is a dedicated layer 2 access port. 
+
+- **switchport mode trunk** (DTP mode ON): It puts the interface into trunking mode. The interface will become a trunk interface even if the neighbouring ports are trunk or not that is why it is called DTP mode ON. 
+
+- **switchport mode dynamic auto**: This is a default mode on the older CISCO switches. This mode makes the interface able to convert to a trunk link. The interface will become a trunk link if the neighbouring interface is set to trunk or desirable mode. If both switches interface mode is auto, then the trunk will not be formed. 
+
+- **switchport mode dynamic desirable**: By this mode, the interface will actively attempt to convert the link into a trunk link. The interface will become a trunk port if the neighbouring interface is set to trunk, desirable or auto. 
+
+For this lab we are going to use a copy of the previous lab with its configuration because we are going to revert it.
+
+![](../img/trunk_link.png)
+
+Let's revert the changes in interfaces FastEthernet0/10.
+
+Current configuration on Switch0:
+
+```bash
+Switch0>en
+Switch0#show int f0/10 sw
+Switch0#show int f0/10 switchport 
+Name: Fa0/10
+Switchport: Enabled
+Administrative Mode: trunk
+Operational Mode: trunk
+Administrative Trunking Encapsulation: dot1q
+Operational Trunking Encapsulation: dot1q
+Negotiation of Trunking: Off       <---- ATTENTION TO THIS
+Access Mode VLAN: 1 (default)
+Trunking Native Mode VLAN: 99 (Inactive)
+Voice VLAN: none
+Administrative private-vlan host-association: none
+Administrative private-vlan mapping: none
+Administrative private-vlan trunk native VLAN: none
+Administrative private-vlan trunk encapsulation: dot1q
+Administrative private-vlan trunk normal VLANs: none
+Administrative private-vlan trunk private VLANs: none
+Operational private-vlan: none
+Trunking VLANs Enabled: 10,20,99
+Pruning VLANs Enabled: 2-1001
+Capture Mode Disabled
+Capture VLANs Allowed: ALL
+Protected: false
+Unknown unicast blocked: disabled
+Unknown multicast blocked: disabled
+Appliance trust: none
+
+
+Switch0#
+Switch0#show running-config 
+Building configuration...
+
+Current configuration : 1405 bytes
+!
+version 15.0
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Switch0
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+interface FastEthernet0/1
+ switchport access vlan 10
+ switchport mode access
+!
+interface FastEthernet0/2
+ switchport access vlan 10
+ switchport mode access
+!
+interface FastEthernet0/3
+ switchport access vlan 20
+ switchport mode access
+!
+interface FastEthernet0/4
+ switchport access vlan 20
+ switchport mode access
+!
+interface FastEthernet0/5
+!
+------ I REMOVED SOME INTERFACES FOR BETTER READABILITY ------ 
+!
+interface FastEthernet0/10
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface FastEthernet0/11
+!
+------ I REMOVED SOME INTERFACES FOR BETTER READABILITY ------ 
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+!
+line con 0
+!
+line vty 0 4
+ login
+line vty 5 15
+ login
+!
+!
+end
+
+
+Switch0#
+```
+
+Let's revert the changes on Interface F0/10:
+
+1. Enable negotiation:
+
+```bash
+Switch0#sho runn | section FastEthernet0/10
+interface FastEthernet0/10
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+ switchport mode trunk
+ switchport nonegotiate
+Switch0#sh int f0/10 switchport | section Negotiation
+Negotiation of Trunking: Off
+Switch0#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch0(config)#int f0/10
+Switch0(config-if)#no switchport nonegotiate
+Switch0(config-if)#do sh int f0/10 switchport | section Negotiation
+Negotiation of Trunking: On
+Switch0(config-if)#do sho runn | section FastEthernet0/10
+interface FastEthernet0/10
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+ switchport mode trunk
+```
+
+> We enabled negotiation because `dynamic auto` requires negotiation to work.
+
+2. Set access mode to dynamic auto (default configuration)
+
+```bash
+Switch0(config-if)#switchport mode dynamic auto 
+Switch0(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/10, changed state to up
+
+Switch0(config-if)#do sho runn | section FastEthernet0/10
+interface FastEthernet0/10
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+```
+
+3. Remove native VLAN configuration
+
+```bash
+Switch0(config-if)#no switchport trunk native vlan 
+Switch0(config-if)#do sho runn | section FastEthernet0/10
+interface FastEthernet0/10
+ switchport trunk allowed vlan 10,20,99
+```
+
+4. Remove allowed VLANs
+
+```bash
+Switch0(config-if)#no switchport trunk allowed vlan
+Switch0(config-if)#
+Switch0(config-if)#do sho runn | section FastEthernet0/10
+interface FastEthernet0/10
+Switch0(config-if)#
+```
+
+Although we have revert the configuration on Switch0, Switch1 stills has a static trunk configuration. As you can see in the table, dynamic auto and trunk will result in a trunk link. For this reason you will see messages in the terminal like:
 
 ```
-Switch#show interfaces FastEthernet 0/5 switchport 
-Name: Fa0/5
+Switch0#
+%CDP-4-NATIVE_VLAN_MISMATCH: Native VLAN mismatch discovered on FastEthernet0/10 (1), with Switch1 FastEthernet0/10 (99)
+```
+
+We reverted the changes on Switch0, but both switches negotiated and the link became a trunk link. Remember that default native VLAN is VLAN 1.
+
+Let's change the native vlan on Switch0 to VLAN 99:
+
+```bash
+Switch0#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch0(config)#int f0/10
+Switch0(config-if)#switchport trunk native vlan 99
+Switch0(config-if)#do sho runn | section FastEthernet0/10
+interface FastEthernet0/10
+ switchport trunk native vlan 99
+Switch0(config-if)#do sh in f0/10 switchport
+Name: Fa0/10
 Switchport: Enabled
-Administrative Mode: dynamic auto   <--- ATTENTION TO THIS
-Operational Mode: down
+Administrative Mode: dynamic auto <-- ATTENTION TO THIS
+Operational Mode: trunk           <-- ATTENTION TO THIS
 Administrative Trunking Encapsulation: dot1q
-Operational Trunking Encapsulation: native
-Negotiation of Trunking: On
+Operational Trunking Encapsulation: dot1q
+Negotiation of Trunking: On       <-- ATTENTION TO THIS
 Access Mode VLAN: 1 (default)
-Trunking Native Mode VLAN: 1 (default)
+Trunking Native Mode VLAN: 99 (Inactive) <-- ATTENTION TO THIS
 Voice VLAN: none
 Administrative private-vlan host-association: none
 Administrative private-vlan mapping: none
@@ -388,19 +598,67 @@ Unknown unicast blocked: disabled
 Unknown multicast blocked: disabled
 Appliance trust: none
 
-Switch#
+
+Switch0(config-if)#
 ```
 
-> Switch ports are configured in `dynamic auto` mode by default **in Switches Cisco Catalyst 2960**.
+Why does VLAN 99 says (Inactive)?:
 
-These are the possible options and resulting mode when configuring the switchport mode in 2 connected switches:
+Because we never created VLAN 99 in the switch, `switchport trunk native vlan <vid>`only specifies the VLAN but it does not create the VLAN, let's create VLAN 99:
 
-|                 |Dynamic Auto|Dynamic Desirable|Trunk               |Access              |
-|-----------------|------------|-----------------|--------------------|--------------------|
-|Dynamic Auto     |Access      |Trunk            |Trunk               |Access              |
-|Dynamic Desirable|Trunk       |Trunk            |Trunk               |Access              |
-|Trunk            |Trunk       |Trunk            |Trunk               |Limited Connectivity|
-|Access           |Access      |Access           |Limited Connectivity|Access              |
+```bash
+Switch0(config)#vlan 99
+Switch0(config-vlan)#do sh int f0/10 switchport | section Trunking Native
+Trunking Native Mode VLAN: 99 (VLAN0099)
+```
+
+Save changes:
+
+```bash
+Switch0(config-vlan)#do wr mem
+Building configuration...
+[OK]
+```
+
+For the sake of learning, let's change the switchport mode of F0/10 in Switch1 to dynamic desirable:
+
+```bash
+Switch1>en
+Switch1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch1(config)#int f0/10
+Switch1(config-if)#switchport mode dynamic desirable 
+Command rejected: Conflict between 'nonegotiate' and 'dynamic' status
+```
+
+REMEMBER: dynamic auto, and dynamic desirable requires negotiation:
+
+```bash
+Switch1(config-if)#no switchport nonegotiate 
+Switch1(config-if)#switchport mode dynamic desirable 
+
+Switch1(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/10, changed state to up
+
+Switch1(config-if)#
+```
+
+Finally create VLAN 99 and save changes:
+
+```bash
+Switch1(config-if)#exit
+Switch1(config)#vlan 99
+Switch1(config-vlan)#do wr mem
+Building configuration...
+[OK]
+Switch1(config-vlan)#
+```
+
+Now we have one port un dynamic auto and one port in dynamic desirable, both using VLAN 99 as the native VLAN, and allowing VLANs 10, 20, and 99. All of this using dynamic configuration.
+
+What if we change one port to dynamic auto?, answer: it will convert the link in an access link, thus we cannot send traffic from different VLANs.
+
+You can download this last lab with all the changes we made at [trunk_links_dynamic.pkt](https://github.com/noevazz/CCNA_200_301/raw/main/labs/trunk_links_dynamic.pkt).
 
 ## External resources
 
