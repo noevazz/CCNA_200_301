@@ -44,7 +44,7 @@ Important notes:
 - When someone says Multicast think we need it for fast multiplayer with no more than 8 mates.
 
 ## Anycast
- An IPv6 anycast address is any IPv6 unicast address that can be assigned to multiple devices. A packet sent to an anycast address is routed to the nearest device having that address. Anycast addresses are beyond the scope of this course.
+ An IPv6 anycast address **is any IPv6 unicast address** that can be assigned to multiple devices. A packet sent to an anycast address is routed to the nearest device having that address. Anycast addresses are beyond the scope of this course.
 
 ![remember_ipv6_ranges.png](../img/remember_ipv6_ranges.png)
 

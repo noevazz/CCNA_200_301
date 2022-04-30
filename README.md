@@ -4,52 +4,52 @@ This repository contains documents that I will use for my exam preparation.
 
 ## Sections
 
-|Name |Topic in the exam|
-|-----|-----------------|
-|[Introduction to networks](./sections/introduction_to_networks.md)|wip|
-|[Basic security concepts](./sections/basic_security_concepts.md)|wip|
-|[OSI model]: To do list|wip|
-|[TCP/IP model]: To do list|wip|
-|[Layer 2 and layer 3 Addressing]: To do list|wip|
-|[Physical layer]: To do list|wip|
-|[Copper cables]: To do list|wip|
-|[Fiber cables]: To do list|wip|
-|[Wireless principles](./sections/wireless_principles.md)|1.11 to 1.11.d (Whole topic) I still need to add the Nonoverlapping, SSID and encryption part|
-|[Link Access layer]: To do list|wip|
-|[Ethernet]: To do list|wip|
-|[VLANS](./sections/vlans.md)|wip|
-|[Switch trunks and DTP](./sections/switch_trunks_and_DTP.md)|wip|
-|[Inter-VLAN routing]: To do list|wip|
-|[Switchport security](./sections/switch_port_security.md)|wip|
-|[Network layer]: To do list|wip|
-|[IPv4 Addresses]: To do list|wip|
-|[IPv4 Classes](./sections/ipv4_classes.md)|wip|
-|[IPv4 private addresses]: To do list|wip|
-|[IPv4 subnetting]: To do list|wip|
-|[IPv6 addresses]: To do list|wip|
-|[IPv6 address types](./sections/ipv6_address_types.md)|1.9 to 1.9.e|
-|[ARP]: To do list|wip|
-|[Transport layer]: To do list|wip|
-|[TCP]: To do list|wip|
-|[UDP]: To do list|wip|
-|[Application layer]: To do list|wip|
-|[HTTP]: To do list|wip|
-|[IP services]: To do list|wip|
-|[DHCPv4]: To do list|wip|
-|[DHCPv6]: To do list|wip|
-|[Security in DHCP]: To do list|wip|
-|[NAT for IPv4]: To do list|wip|
-|[STP]: To do list|wip|
-|[Syslog]: To do list|wip|
-|[ACLs]: To do list|wip|
-|[TFTP/FTP]: To do list|wip|
-|[SSH]: To do list|wip|
-|[NTP]: To do list|wip|
-|[SNMP]: To do list|wip|
-|[Routing]: To do list|wip|
-|[Static routes]: To do list|wip|
-|[OSPF]: To do list|wip|
-|[Automation and Programmability]: To do list|6.0 to 6.7 (whole topic), still need to do all this section|
+- [Introduction to networks](./sections/introduction_to_networks.md)
+- [Basic security concepts](./sections/basic_security_concepts.md)
+- [OSI model]: To do list
+- [TCP/IP model]: To do list
+- [Layer 2 and layer 3 Addressing](./sections/layer_2_and_layer_3_addressing.md)
+- [Physical layer]: To do list
+    - [Copper cables]: To do list
+    - [Fiber cables]: To do list
+    - [Wireless principles](./sections/wireless_principles.md)1.11 to 1.11.d (Whole topic) I still need to add the Nonoverlapping, SSID and encryption part
+- [Link Access layer]: To do list
+    - [Ethernet]: To do list
+    - [Switching concepts]: To do list
+    - [VLANS](./sections/vlans.md)
+    - [Switch trunks and DTP](./sections/switch_trunks_and_DTP.md)
+    - [Inter-VLAN routing]: To do list
+    - [Switchport security](./sections/switch_port_security.md)
+- [Network layer]: To do list
+    - [IPv4 Addresses]: To do list
+    - [IPv4 Classes](./sections/ipv4_classes.md)
+    - [IPv4 private addresses]: To do list
+    - [IPv4 subnetting]: To do list
+    - [IPv6 addresses]: To do list
+    - [IPv6 address types](./sections/ipv6_address_types.md)1.9 to 1.9.e
+    - [ARP]: To do list
+- [Transport layer]: To do list
+    - [TCP]: To do list
+    - [UDP]: To do list
+- [Application layer]: To do list
+    - [HTTP]: To do list
+- [IP services]: To do list
+    - [DHCPv4]: To do list
+    - [DHCPv6]: To do list
+    - [Security in DHCP]: To do list
+    - [NAT for IPv4]: To do list
+    - [STP]: To do list
+    - [Syslog]: To do list
+    - [ACLs]: To do list
+    - [TFTP/FTP]: To do list
+    - [Cryptology](./sections/cryptology.md): To do list
+        - [SSH](./sections/ssh.md): To do list
+    - [NTP]: To do list
+    - [SNMP]: To do list
+    - [Routing]: To do list
+    - [Static routes]: To do list
+    - [OSPF]: To do list
+- [Automation and Programmability]: To do list6.0 to 6.7 (whole topic), still need to do all this section
 
 
 ## 📋 Exam topics
