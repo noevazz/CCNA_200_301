@@ -13,7 +13,7 @@ This repository contains documents that I will use for my exam preparation.
     - [Copper cables]: To do list
     - [Fiber cables]: To do list
     - [Wireless principles](./sections/wireless_principles.md)1.11 to 1.11.d (Whole topic) I still need to add the Nonoverlapping, SSID and encryption part
-- [Link Access layer]: To do list
+- [Data Link layer]: To do list
     - [Ethernet]: To do list
     - [Switching concepts]: To do list
     - [VLANS](./sections/vlans.md)
