@@ -4,17 +4,17 @@ This repository contains documents that I will use for my exam preparation.
 
 ## Sections
 
-- [Introduction to networks](./sections/introduction_to_networks.md)
+- [Introduction to networks](./sections/introduction_to_networks.md) (Contains terminology, presents OSI and TCP/IP models, etc.)
+- [Network components](./sections/network_components.md)
+- [Network diagrams](./sections/network_diagrams.md)
 - [Basic security concepts](./sections/basic_security_concepts.md)
-- [OSI model]: To do list
-- [TCP/IP model]: To do list
 - [Layer 2 and layer 3 Addressing](./sections/layer_2_and_layer_3_addressing.md)
 - [Physical layer]: To do list
     - [Copper cables]: To do list
     - [Fiber cables]: To do list
     - [Wireless principles](./sections/wireless_principles.md)1.11 to 1.11.d (Whole topic) I still need to add the Nonoverlapping, SSID and encryption part
 - [Data Link layer]: To do list
-    - [Ethernet]: To do list
+    - [Ethernet](./sections/ethernet.md)
     - [Switching concepts]: To do list
     - [VLANS](./sections/vlans.md)
     - [Switch trunks and DTP](./sections/switch_trunks_and_DTP.md)
@@ -24,6 +24,7 @@ This repository contains documents that I will use for my exam preparation.
     - [IPv4 Addresses]: To do list
     - [IPv4 Classes](./sections/ipv4_classes.md)
     - [IPv4 private addresses]: To do list
+    - [IPv4 Special Addresses]
     - [IPv4 subnetting]: To do list
     - [IPv6 addresses]: To do list
     - [IPv6 address types](./sections/ipv6_address_types.md)1.9 to 1.9.e

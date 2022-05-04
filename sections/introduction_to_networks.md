@@ -7,14 +7,17 @@
 - [Networking models](#networking-models)
     - [Benefits of a layered network model](#benefits-of-a-layered-network-model)
 - [OSI model](#osi-model)
-    - [Data flow](#data-flow)
-    - [Layer 7 | Application Layer](#layer-7--application-layer)
-    - [Layer 6 | Presentation Layer](#layer-6--presentation-layer)
-    - [Layer 5 | Session Layer](#layer-5--session-layer)
-    - [Layer 4 | Transport Layer](#layer-4--transport-layer)
-    - [Layer 3 | Network](#layer-3--network)
-    - [Layer 2 | Data Link Layer](#layer-2--data-link-layer)
-    - [Layer 1 | Physical Layer](#layer-1--physical-layer)
+    - [Data flow through the OSI model](#data-flow-through-the-osi-model)
+    - [Data encapsulation](#data-encapsulation)
+    - [Layer 7 Application Layer](#layer-7-application-layer)
+    - [Layer 6 Presentation Layer](#layer-6-presentation-layer)
+    - [Layer 5 Session Layer](#layer-5-session-layer)
+    - [Layer 4 Transport Layer](#layer-4-transport-layer)
+    - [Layer 3 Network Layer](#layer-3-network)
+    - [Layer 2 Data Link Layer](#layer-2-data-link-layer)
+    - [Layer 1 Physical Layer](#layer-1-physical-layer)
+- [TCP/IP model](#tcpip-model)
+- [Protocol interaction](#protocol-interaction)
 
 
 ## What is a network?
@@ -63,13 +66,23 @@ Yes, the structure start at 7 and ends at 1. In the OSI model the communication 
 
 **IMPORTANT**: The OSI model specifies **universal** set of rules in order to support interoperability between different products and software. Protocols then are responsible to define (and sometimes standardize) the technical implementations. **OSI defines the expected functionality and Protocols define how to do it**.
 
-### Data flow
+### Data flow through the OSI model
 
 When a PC starts a communication to other PC the process starts at Layer 7, then the output of each layer is passed to the next layer, when the receiving PC has the data of Layer 1 it starts to reverse the process, data will be passed from layer 1 to layer 7 in the destination.
 
 ![osi_dataflow.jpg](../img/osi_dataflow.jpg)
 
-### Layer 7 | Application Layer
+### Data encapsulation
+
+As we already mentioned, each layer adds more data before passing the data to the next layer:
+
+![encapsulation.jpg](../img/encapsulation.jpg)
+
+Layers add a header with its information add the beginning and sometimes a trailer at the end.
+
+When the receiving device has the message it starts the **decapsulation** process (process and remove headers and trailers and then send the message to the layer above).
+
+### Layer 7 Application Layer
 
 This is the only layer that directly interacts with data from the user. 
 
@@ -81,8 +94,10 @@ Application layer protocols include HTTP as well as SMTP (Simple Mail Transfer P
 
 Common application protocols that work in this layer include: HTTP, FTP, SMTP, DNS, Telnet, SSH, IMAP, POP, SNMP, etc. These protocols will be studied in other sections.
 
+> The data (or PDU: Protocol Data Unit) generated at layer 7 is know as "data"
 
-### Layer 6 | Presentation Layer
+
+### Layer 6 Presentation Layer
 
 The presentation layer is responsible for:
 - Translation: Translate incoming data (data from layer 5)
@@ -91,7 +106,10 @@ The presentation layer is responsible for:
 
 Common examples for protocols and technology that operate in the Presentation layer include X.25, ZIP, XML, JSON, ASCII, EBCDIC, JPEG, MP3, etc.
 
-### Layer 5 | Session Layer
+> The data (or PDU: Protocol Data Unit) generated at this layer 6 is know as "data"
+
+
+### Layer 5 Session Layer
 
 The Session Layer provides **process to process** communications between two or more networked hosts
 
@@ -99,8 +117,10 @@ The Session Layer provides **process to process** communications between two or 
 
 This layer is responsible for maintaining proper communication by establishing, managing and terminating sessions (a property of TCP, a layer 4 protocol) between two nodes. It takes care of gracefully closing sessions and for session check pointing and recovery.
 
+> The data (or PDU: Protocol Data Unit) generated at this layer 5 is know as "data"
 
-### Layer 4 | Transport Layer
+
+### Layer 4 Transport Layer
 
 **IMPORTANT**: Layers four through seven are known as the host layers. They define software that **implements network services**.
 
@@ -110,8 +130,10 @@ Protocols at layer 4 manage end-to-end message delivery.
 
 TCP and UDP are popular protocols at this layer.
 
+> The data (or PDU: Protocol Data Unit) generated at this layer 4 is know as "segment"
 
-### Layer 3 | Network Layer
+
+### Layer 3 Network Layer
 
 The network layer is responsible for facilitating data transfer between two **different** networks.
 
@@ -123,8 +145,10 @@ The network layer also finds the best physical path for the data to reach its de
 
 **IMPORTANT**: Layers one through three are known as the **media layers**. They define hardware orientation such as routing (layer 3), switching (layer 2) and cable specifications. 
 
+> The data (or PDU: Protocol Data Unit) generated at this layer 3 is know as "packet"
 
-### Layer 2 | Data Link Layer
+
+### Layer 2 Data Link Layer
 
 Data link layer facilitates data transfer between two devices on the **SAME** network.
 
@@ -149,8 +173,10 @@ Data link layer is responsible for flow control and error control in intra-netwo
 - **Intaurb**: within a city. Like intraurban bus service means bus service within a city.
 - **Intranet**: within the same network
 
+> The data (or PDU: Protocol Data Unit) generated at this layer 2 is know as "frame"
 
-### Layer 1 | Physical Layer
+
+### Layer 1 Physical Layer
 
 This layer is concerned with electrically or optically transmitting raw unstructured data bits across the network from the physical layer of the sending device to the physical layer of the receiving device.
 
@@ -158,49 +184,33 @@ This layer is concerned with electrically or optically transmitting raw unstruct
 
 It can include specifications such as voltages, pin layout, cabling, and radio frequencies. At the physical layer, one might find “physical” resources such as network hubs, cabling, repeaters, network adapters or modems.
 
+> The data (or PDU: Protocol Data Unit) generated at this layer 1 is know as "bits"
 
 
 ## TCP/IP model
 
-## Topology
+TCP/IP stands for Transmission Control Protocol/Internet Protocol and is a suite of communication protocols used to interconnect network devices on the internet. TCP and IP are the two main protocols, though others are included in the suit
 
+Even though the TCP/IP model is what we use today, we still use the OSI model numbering.
 
+TCP/IP functionality is divided into four layers, each of which includes specific protocols:
 
+![tcpip_model.png](../img/tcpip_model.png)
 
+The TCP/IP model has suffered a few updates. In the middle of the image you can see the original version, and at the right the updated version.
 
+> In the original version the Link layer was also known as "Network Access layer".
 
-## Peer to Peer
+IMPORTANT: Learn the updated version of the TCP/IP model.
 
-## Components of a network
+Note the current TCP/IP model matches the first 4 layers of the OSI model, layer 5, 6 and 7 are collapsed into Application layer in TCP/IP model.
 
-There are 3 fundamental components in a network:
+## Protocol interaction
 
-- **Devices**: These are the physical elements, or hardware of the network. Examples are: phone, computer, printer, home router/modem, etc.
-- **Media**: It provides a channel over which messages travels. Examples are: copper cables, fiber cables, radio frequency signals, etc.
-- **Services and Processes**: Services include network applications people use every day and processes provide functionality that directs and move messages through the network.
+When a layer in a device communicates to the same layer in the destination device it is know as **same-layer interaction**. Example: HTTP used by your web browser communicates with the HTTP server of the page you are visiting.
 
-### Devices
+When a layer communicates with the layer below of it or with the layer above it, it is know as **adjacent-layer interaction**. Example IP (layer 3) communicates to TCP (layer 4) asking for specific information.
 
-Devices are dived in 2 categories:
-
-- End devices:
-- Intermediary devices:
-
-### Media
-
-### Services and processes
-
-## Topology diagrams
-
-### Physical topology
-
-### Logical topology
-
-## Network types
-
-## What is the Internet
-
-### submarine cables
 
 # External resources
 
@@ -211,3 +221,4 @@ Devices are dived in 2 categories:
 5. [https://www.cloudflare.com/learning/ddos/glossary/open-systems-interconnection-model-osi/](https://www.cloudflare.com/learning/ddos/glossary/open-systems-interconnection-model-osi/)
 6. [https://www.subnetting.net/school/docs/osi-model](https://www.subnetting.net/school/docs/osi-model)
 7. [https://www.coengoedegebure.com/osi-model/](https://www.coengoedegebure.com/osi-model/)
+8. [https://www.techtarget.com/searchnetworking/definition/TCP-IP](https://www.techtarget.com/searchnetworking/definition/TCP-IP)
